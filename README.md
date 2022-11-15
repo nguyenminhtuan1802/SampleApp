@@ -3,5 +3,5 @@ npm install body-parser cors express mongoose nodemon bcryptjs jsonwebtoken <br 
 npm start <br />
 
 - Client set up <br />
-npm install --legacy-peer-deps
+npm install --legacy-peer-deps <br />
 npm start <br />
