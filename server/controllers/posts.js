@@ -72,8 +72,6 @@ export const likePost = async (req, res) => {
       }
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No post with id: ${id}`);
-
-    console.log("Identity verified!");
     
     const post = await PostMessage.findById(id);
 
@@ -81,10 +79,8 @@ export const likePost = async (req, res) => {
 
     if (index === -1) {
       post.likes.push(req.userId);
-      console.log("unlike");
     } else {
       post.likes = post.likes.filter((id) => id !== String(req.userId));
-      console.log("like");
     }
     const updatedPost = await PostMessage.findByIdAndUpdate(id, post, { new: true });
     res.status(200).json(updatedPost);
