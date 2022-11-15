@@ -1,56 +1,54 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE } from '../constants/actionTypes';
-import * as api from '../api';
+import { FETCH_ALL, CREATE, UPDATE, DELETE, LIKE } from '../constants/actionTypes';
+import * as api from '../api/index.js';
 
-// Action Creators
 export const getPosts = () => async (dispatch) => {
-    try {
-        console.log("Getting posts!");
-        const { data } = await api.fetchPosts();
-        dispatch({ type: FETCH_ALL, payload: data});
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+  try {
+    const { data } = await api.fetchPosts();
+
+    dispatch({ type: FETCH_ALL, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const createPost = (post) => async (dispatch) => {
-    try {
-        const { data } = await api.createPost(post);
+  try {
+    const { data } = await api.createPost(post);
 
-        dispatch({ type: CREATE, payload: data });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    dispatch({ type: CREATE, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const updatePost = (id, post) => async (dispatch) => {
-    try {
-        console.log("Updating posts!");
-        const { data } = await api.updatePost(id, post);
+  try {
+    const { data } = await api.updatePost(id, post);
 
-        dispatch({ type: UPDATE, payload: data });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-export const deletePost = (id) => async (dispatch) => {
-    try {
-        console.log("Deleting posts!");
-        await api.deletePost(id);
-
-        dispatch({ type: DELETE, payload: id });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+    dispatch({ type: UPDATE, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 export const likePost = (id) => async (dispatch) => {
-    try {
-        console.log("Liking posts!");
-        const { data } = await api.likePost(id);
+  const user = JSON.parse(localStorage.getItem('profile'));
 
-        dispatch({ type: UPDATE, payload: data });
-    } catch (error) {
-        console.log(error.message);
-    }
-}
+  try {
+    const { data } = await api.likePost(id, user?.token);
+
+    dispatch({ type: LIKE, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deletePost = (id) => async (dispatch) => {
+  try {
+    await await api.deletePost(id);
+
+    dispatch({ type: DELETE, payload: id });
+  } catch (error) {
+    console.log(error);
+  }
+};
