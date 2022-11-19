@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { messageChannel } from '../index.js';
 
 import PostMessage from '../models/postMessage.js';
 
@@ -34,6 +35,21 @@ export const createPost = async (req, res) => {
 
     try {
         await newPostMessage.save();
+
+        const newPostNoti = {
+            title: newPostMessage.title,
+            message: newPostMessage.message,
+            name: newPostMessage.name,
+            creator: newPostMessage.creator,
+            tags: newPostMessage.tags,
+          };
+        
+        var msg = ["First.", "Second..", "Third...", "Fourth....", "Fifth....."];
+        var q = 'task_queue';
+        for (let i = 0; i < msg.length; i++) {
+            messageChannel.sendToQueue(q, Buffer.from(msg[i]), {deliveryMode: true});
+            console.log(" [x] Sent '%s'", msg[i]);            
+        }
 
         res.status(201).json(newPostMessage );
     } catch (error) {
