@@ -18,12 +18,10 @@ amqp.connect('amqp://localhost').then(function(conn) {
     function doWork(msg) {
       var body = msg.content.toString();
       console.log(" [x] Received '%s'", body);
-      var secs = body.split('.').length - 1;
-      //console.log(" [x] Task takes %d seconds", secs);
       setTimeout(function() {
         console.log(" [x] Done");
         ch.ack(msg);
-      }, secs * 1000);
+      }, 5 * 1000);
     }
   });
 }).catch(console.warn);

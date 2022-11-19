@@ -37,6 +37,7 @@ export const createPost = async (req, res) => {
         await newPostMessage.save();
 
         const newPostNoti = {
+            notiType: "New Post",
             title: newPostMessage.title,
             message: newPostMessage.message,
             name: newPostMessage.name,
@@ -44,12 +45,9 @@ export const createPost = async (req, res) => {
             tags: newPostMessage.tags,
           };
         
-        var msg = ["First.", "Second..", "Third...", "Fourth....", "Fifth....."];
         var q = 'task_queue';
-        for (let i = 0; i < msg.length; i++) {
-            messageChannel.sendToQueue(q, Buffer.from(msg[i]), {deliveryMode: true});
-            console.log(" [x] Sent '%s'", msg[i]);            
-        }
+        messageChannel.sendToQueue(q, Buffer.from(JSON.stringify(newPostNoti)), {deliveryMode: true});
+        console.log(" [x] Sent New Post Noti with Title '%s'", newPostNoti.title);
 
         res.status(201).json(newPostMessage );
     } catch (error) {
